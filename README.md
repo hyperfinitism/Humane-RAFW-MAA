@@ -18,7 +18,7 @@ Microsoftからも公式サンプルである[microsoft-azure-attestation](https
 
 * MAAからはAttestation応答（RA report）がJWT形式で返却されますが、その署名をAzure提供のJWKで検証し、JWTのメタデータ（発行者やタイムスタンプ）の検証も行う実装を取り入れています。ただし、ルートCAとしてマシンにインストールすらされていないAzureの自己署名証明書に基づき、Azure提供のJWKについての証明書チェーン検証を行うのは、Azureを全面的に信頼するMAAを用いたRAにおいては脅威モデル的に冗長であるため、その実行を廃しています。JWKのURLは、後述のユーザ指定の構成証明プロバイダのURLから自動的に生成するため、JWKのURL自体はユーザが明示的に指定する必要はありません。
 
-* ユーザ（特にクライアント）によって必要な、RA特有の設定情報は、原則としてsettings.[ini](https://github.com/pulzed/mINI)内における設定で完結出来る設計になっています。詳細については後述の各種説明を参照してください。
+* ユーザ（特にクライアント）によって必要な、RA特有の設定情報は、原則としてsettings_client.[ini](https://github.com/pulzed/mINI)内における設定で完結出来る設計になっています。詳細については後述の各種説明を参照してください。
 
 * EPID-RA同様、公開鍵の連結に対して署名を打ったり、Report Dataに公開鍵の連結に対するハッシュ値を同梱したりしながら、RA成立後の暗号通信のための楕円曲線ディフィー・ヘルマン鍵共有をRAに並行して安全に実施します。交換した共通鍵は、Humane-RAFWと全く同じ方法で利用する事ができます。
 
@@ -377,7 +377,7 @@ user@machine:~/Develop/sgx/Humane-RAFW-MAA$
 | 設定項目 | 説明 |
 | -- | -- |
 | MAA_URL | 構成証明プロバイダのURL。構成証明プロバイダの作成後、その概要画面の「構成証明 URI」の部分に表示されている。`https://`付きで記載する事。 |
-| MAA_API_VERSION | MAA（構成証明プロバイダ）のAPIバージョンを記載する。2023/12/19現在では`2022-08-01`が最新であるため、テンプレートにもこのバージョンをデフォルトで記載済みである。 |
+| MAA_API_VERSION | MAA（構成証明プロバイダ）のAPIバージョンを記載する。2025/11/11現在では`2025-06-01`が最新であるため、テンプレートにもこのバージョンをデフォルトで記載済みである。 |
 | CLIENT_ID | クライアントのIDを指定する。「準備」のセクションで登録した、`Server_Enclave/client_pubkey.hpp`にハードコーディングしてある署名検証用公開鍵配列の`client_signature_public_key`におけるインデックスに等しい。単一クライアントでのみ運用する場合は常時0で良い。 |
 | MINIMUM_ISVSVN | クライアントがSGXサーバに要求する最小ISVSVN値。ISVSVNは、`Server_Enclave/Enclave.config.xml`において`<ISVSVN>`タグでSGXサーバ側が設定する。 |
 | REQUIRED_ISV_PROD_ID | クライアントがSGXサーバに要求するISV Product ID値。ISV Product IDは、`Server_Enclave/Enclave.config.xml`において`<ProdID>`タグでSGXサーバ側が設定する。 |
